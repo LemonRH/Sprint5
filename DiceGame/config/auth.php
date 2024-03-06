@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'api' => [
+            'driver' => 'passport',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -64,11 +69,6 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*
@@ -107,5 +107,21 @@ return [
     */
 
     'password_timeout' => 10800,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Passport Personal Access Client
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the Passport personal access client details.
+    | This client is used to issue personal access tokens and should have
+    | the "password" grant type configured.
+    |
+    */
+
+    'personal_access_client' => [
+        'secret' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET'),
+        'id' => env('PASSPORT_PERSONAL_ACCESS_CLIENT_ID'),
+    ],
 
 ];

@@ -40,8 +40,10 @@ class Kernel extends HttpKernel
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'throttle:api',
+            //'throttle:api',
+            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\PassportAuthMiddleware::class, // Agrega la línea para el middleware de Passport
         ],
     ];
 
@@ -63,5 +65,17 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'admin' => \App\Http\Middleware\AdminMiddleware::class, // Nuevo middleware para administradores
+        'user' => \App\Http\Middleware\UserMiddleware::class, // Nuevo middleware para usuarios estándar
+        'passport.auth' => \App\Http\Middleware\PassportAuthMiddleware::class,
+
     ];
+
+
+    protected $middleWareAliases = [
+        'auth' => \App\Http\Middleware\PassportAuthMiddleware::class, // Agrega la línea para el middleware de Passport
+
+    ];
+
+
 }
