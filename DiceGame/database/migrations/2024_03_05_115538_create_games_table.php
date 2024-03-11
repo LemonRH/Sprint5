@@ -9,7 +9,7 @@ return new class extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id'); // Cambiamos esto
+            $table->unsignedBigInteger('user_id'); //cambio
             $table->integer('dice1');
             $table->integer('dice2');
             $table->boolean('is_won');

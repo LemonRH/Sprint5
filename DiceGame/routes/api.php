@@ -18,29 +18,31 @@ use App\Http\Controllers\GameController; // Asegúrate de importar GameControlle
 |
 */
 
-// Rutas de autenticación
-Route::post('/login', [AuthController::class, 'login'])->withoutMiddleware(PassportAuthMiddleware::class);
-Route::post('/register', [AuthController::class, 'register'])->withoutMiddleware(PassportAuthMiddleware::class);
+//rutas de autenticación
+Route::post('/login', [AuthController::class, 'login'])->withoutMiddleware(PassportAuthMiddleware::class);//*
+Route::post('/register', [AuthController::class, 'register'])->withoutMiddleware(PassportAuthMiddleware::class);//*
 
-// Rutas protegidas que requieren autenticación con Passport y middleware de roles
-Route::middleware(['auth:api', 'admin'])->group(function () {
+Route::middleware(['auth:api', 'user'])->group(function () {
     Route::post('/players', [PlayerController::class, 'store']); // Crear jugador
     Route::put('/players/{id}', [PlayerController::class, 'update']); // Modificar el nombre del jugador
     Route::delete('/players/{id}/games', [PlayerController::class, 'destroyGames']); // Eliminar las tiradas del jugador
     Route::get('/players', [PlayerController::class, 'index']); // Listado de todos los jugadores con su porcentaje medio de éxitos
     Route::get('/players/{id}/games', [GameController::class, 'index']); // Listado de jugadas por un jugador
     Route::post('/players/{id}/games', [GameController::class, 'store']); // Ruta para tirar dados de un jugador
+});
+
+// Rutas protegidas que requieren autenticación con Passport y middleware de admin
+Route::middleware(['auth:api', 'admin'])->group(function () {
     Route::get('/players/ranking', [PlayerController::class, 'ranking']); // Ranking medio de todos los jugadores
     Route::get('/players/ranking/loser', [PlayerController::class, 'getLoser']); // Jugador con peor porcentaje de éxito
     Route::get('/players/ranking/winner', [PlayerController::class, 'getWinner']); // Jugador con mejor porcentaje de éxito
 });
-
-// Ruta protegida que requiere autenticación con Passport y middleware de usuario
+//ruta protegida que requiere autenticación con Passport y middleware de usuario
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 });
 
-// Ruta para la emisión de tokens de acceso con Passport
+//ruta para la emisión de tokens de acceso con Passport
 Route::post('/oauth/token', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');

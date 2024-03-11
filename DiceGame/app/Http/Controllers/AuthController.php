@@ -34,7 +34,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'role' => Roles::ADMIN, // Asignamos el rol de usuario por defecto al registrar
+            'role' => Roles::ADMIN, //asignamos el rol de usuario por defecto al registrar ¡¡¡¡¡¡¡¡¡¡¡NO FUNCIONA CORRECTAMENTE!!!!!!!!!!!!!!!!
         ]);
         $credentials = $request->only(['email', 'password']);
         if(Auth::attempt($credentials)) {
@@ -51,24 +51,22 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
-{
-    $credentials = $request->only('email', 'password');
-    
-    if (Auth::attempt($credentials)) {
-        $user = $request->user();
-        $token = $user->createToken('auth_token')->accessToken;
+    {
+        $credentials = $request->only('email', 'password');
+        
+        if (Auth::attempt($credentials)) {
+            $user = $request->user();
+            $token = $user->createToken('auth_token')->accessToken;
 
-        // Verificar el rol del usuario y redirigir según el rol
-        if ($user->role === Roles::ADMIN) {
-            return response()->json(['token' => $token, 'role' => Roles::ADMIN], 200);
-        } elseif ($user->role === Roles::USER) {
-            return response()->json(['token' => $token, 'role' => Roles::USER], 200);
+            return response()->json([
+                'token' => $token,
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'role' => $user->role, 
+            ], 200);
         }
 
-        // En caso de que el rol no esté definido o no coincida con los roles permitidos
+        // Si las credenciales son inválidas, devuelve un error de autorización
         return response()->json(['error' => 'Unauthorized'], 401);
     }
-
-    return response()->json(['error' => 'Unauthorized'], 401);
-}
 }

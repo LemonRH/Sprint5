@@ -26,6 +26,13 @@ class PlayerController extends Controller
         'email' => 'required|email|unique:players',
         'nickname' => 'nullable|unique:players',
     ]);
+    
+    if ($request->has('nickname')) {
+        $existingNickname = Player::where('nickname', $request->nickname)->first();
+        if ($existingNickname) {
+            return response()->json(['error' => 'El apodo ya está en uso'], 400);
+        }
+    }
 
     // Crear un nuevo jugador
     $player = new Player();

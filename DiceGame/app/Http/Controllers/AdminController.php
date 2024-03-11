@@ -21,8 +21,6 @@ class AdminController extends Controller
             return response()->json(['error' => 'Unauthorized. Solo los administradores pueden acceder a esta acción.'], 401);
         }
 
-        // Aquí puedes realizar la acción de administración
-        // ...
 
         return response()->json(['message' => 'Acción de administración completada con éxito.'], 200);
     }
