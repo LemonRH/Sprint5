@@ -11,7 +11,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        // Desactivar el middleware de autenticación para todos los tests
+        //desactivar el middleware de autenticacion para todos los tests o.O
         $this->withoutMiddleware();
     }
 }
